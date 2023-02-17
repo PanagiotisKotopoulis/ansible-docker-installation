@@ -1,0 +1,110 @@
+---
+
+  - name: Install Docker on CentOS7
+    hosts: VMs
+    become: true
+    tasks:
+
+    - name: Uninstall Older Versions
+      ansible.builtin.yum:
+        name:
+          - docker
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+        state: absent
+
+
+    - name: Add the EPEL Repository and more repos
+      ansible.builtin.yum:
+        name:
+          - epel-release
+        state: present
+
+
+    - name: Install yum-utils to Set up Repository
+      ansible.builtin.yum:
+        name: yum-utils
+        state: present
+
+    - name: Add Signing Key
+      ansible.builtin.rpm_key:
+        key: https://download.docker.com/linux/centos/gpg
+        state: present 
+
+
+    - name: Install pip
+      ansible.builtin.yum:
+        name:
+          - python-pip
+        state: present
+
+
+    - name: Install Required System Packages
+      ansible.builtin.yum:
+        name:
+          - easy_install
+          - device-mapper-persistent-data
+          - lvm2
+          - python2-setuptools
+          - python2-pip
+          - ca-certificates
+          - curl
+        state: latest
+
+
+    - name: Add repository
+      ansible.builtin.yum_repository:
+        name: docker-ce
+        description: Adding Repo to install Docker Engine
+        baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+
+
+    - name: Edit the local docker-ce.repo
+      replace:
+        path: /etc/yum.repos.d/docker-ce.repo
+        regexp: 'https://download.docker.com/linux/centos/docker-ce.repo'
+        replace: "https://download.docker.com/linux/centos/7/$basearch/stable"
+
+
+    - name: Install Docker Engine, containerd, and Docker Compose
+      ansible.builtin.yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present 
+
+
+    - name: Start Docker
+      service:
+        name: docker
+        service: enabled
+
+        
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+
+    - name: Pull DockerContainer Image
+      docker_image:
+         name: hello-world
+         source: pull
+
+
+    - name: Create Container
+      docker_container:
+        name: hello-world
+        image: hello-world
+        state: started
+                
+
+  
+

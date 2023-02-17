@@ -1,0 +1,4 @@
+[VMs]
+target1 ansible_host=10.251.248.161 ansible_ssh_pass=osboxes.org
+target2 ansible_host=10.251.248.163 ansible_ssh_pass=osboxes.org
+

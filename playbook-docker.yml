@@ -37,7 +37,7 @@
         state: present 
 
 
-    - name: Install pip
+    - name: Install pip.
       ansible.builtin.yum:
         name:
           - python-pip
@@ -71,7 +71,7 @@
         replace: "https://download.docker.com/linux/centos/7/$basearch/stable"
 
 
-    - name: Install Docker Engine, containerd, and Docker Compose
+    - name: Install Docker Engine, containerd, and Docker Compose.
       ansible.builtin.yum:
         name:
           - docker-ce
@@ -88,7 +88,7 @@
         service: enabled
 
         
-    - name: Install Docker Module for Python
+    - name: Install Docker Module for Python !!
       pip:
         name: docker
 

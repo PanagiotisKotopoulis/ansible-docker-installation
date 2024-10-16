@@ -71,7 +71,7 @@
         replace: "https://download.docker.com/linux/centos/7/$basearch/stable"
 
 
-    - name: Install Docker Engine, containerd, and Docker Compose
+    - name: Install Docker Engine, containerd, and Docker Compose.
       ansible.builtin.yum:
         name:
           - docker-ce
